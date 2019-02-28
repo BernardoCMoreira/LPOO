@@ -11,11 +11,11 @@ import java.io.IOException;
 public class Game {
 
     Screen screen;
-    private int x = 10;
-    private int y = 10;
     private Boolean runVar = true;
+    Hero hero;
 
     Game() {
+        hero = new Hero( 10, 10);
         try {
 
             Terminal terminal = new DefaultTerminalFactory().createTerminal();
@@ -33,7 +33,7 @@ public class Game {
 
      private void draw() throws IOException {
             screen.clear();
-            screen.setCharacter(x, y, new TextCharacter('X'));
+           hero.draw(screen);
             screen.refresh();
 
     }
@@ -57,24 +57,20 @@ public class Game {
         System.out.println(key);
 
         if (key.getKeyType() == KeyType.ArrowUp) {
-            if (this.y > 0) {
-                this.y--;
-            }
-
-        } else if (key.getKeyType() == KeyType.ArrowDown) {
-            this.y++;
-        } else if (key.getKeyType() == KeyType.ArrowLeft) {
-            if (this.x > 0) {
-                this.x--;
-            }
-        } else if (key.getKeyType() == KeyType.ArrowRight) {
-            this.x++;
+            hero.moveUp();
         }
-
+        else if (key.getKeyType() == KeyType.ArrowDown) {
+            hero.moveDown();
+        }
+        else if (key.getKeyType() == KeyType.ArrowLeft) {
+            hero.moveLeft();
+        }
+        else if (key.getKeyType() == KeyType.ArrowRight) {
+            hero.moveRight();
+        }
         if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q'){
             runVar = false;
         }
-
         if (key.getKeyType() == KeyType.EOF ){
             runVar = false;
         }
