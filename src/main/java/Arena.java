@@ -20,8 +20,8 @@ public class Arena {
         this.width = width;
     }
 
-    public void draw (Screen screen){
-      hero.draw(screen);
+    public void draw (TextGraphics graphics){
+      hero.draw(graphics);
     }
 
     private void moveHero(Position position) {
