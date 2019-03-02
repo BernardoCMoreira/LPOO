@@ -1,44 +1,42 @@
+import com.googlecode.lanterna.SGR;
+import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextCharacter;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
 
 public class Hero {
-    private int x;
-    private int y;
 
-    Hero (int x, int y){
-        this.x = x;
-        this.y = y;
-    }
+    private Position position;
 
-    public int getX() {
-        return x;
+    public Hero (int x, int y){
+        position = new Position(x,y);
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public Position getPosition() {
+        return position;
     }
 
-    public int getY() {
-        return y;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public Position moveUp(){
+        return new Position(position.getX(), position.getY() - 1);
     }
-
-    public void moveUp(){
-        this.y--;
+    public Position moveDown(){
+        return new Position(position.getX(), position.getY() + 1);
     }
-    public void moveDown(){
-        this.y++;
+    public Position moveLeft(){
+        return new Position(position.getX() -1, position.getY());
     }
-    public void moveLeft(){
-        this.x--;
-    }
-    public void moveRight(){
-        this.x++;
+    public Position moveRight(){
+        return new Position(position.getX() +1, position.getY());
     }
     public void draw(Screen screen){
-        screen.setCharacter(x, y, new TextCharacter('X'));
+        screen.setCharacter(position.getX(), position.getY() , new TextCharacter('X'));
+
     }
+
+
 }
