@@ -39,7 +39,6 @@ public class Game {
             screen.clear();
             arena.draw(screen.newTextGraphics());
             screen.refresh();
-
     }
 
     public void run() {
@@ -67,6 +66,10 @@ public class Game {
         if (key.getKeyType() == KeyType.EOF ){
             runVar = false;
         }
+        if (arena.colision() == true){
+            runVar = false;
+            System.out.println("You lost the Game! ");
+       }
     }
 
 }
