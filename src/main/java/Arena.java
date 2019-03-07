@@ -1,3 +1,6 @@
+import com.googlecode.lanterna.SGR;
+import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
@@ -12,16 +15,15 @@ public class Arena {
     private int height;
     private int width;
     Hero hero;
-    //Monster monsters;
+
     private List<Monster> monsters;
     private List<Wall> walls;
     private List<Coin> coins;
     Random rand = new Random();
+    int scoreAdd = 0;
 
     public Arena(int height, int width){
         hero = new Hero( 10, 10);
-        //monsters = new Monster ( 50, 10);
-
         this.height = height;
         this.width = width;
         this.walls = createWalls();
@@ -32,13 +34,18 @@ public class Arena {
 
     public void draw (TextGraphics graphics){
       hero.draw(graphics);
-     // monsters.draw(graphics);
         for (Wall wall : walls)
             wall.draw(graphics);
         for (Coin coin : coins)
             coin.draw(graphics);
         for (Monster monster : monsters )
             monster.draw(graphics);
+
+        graphics.setForegroundColor(TextColor.Factory.fromString("#FF0000"));
+        graphics.enableModifiers(SGR.BOLD);
+        graphics.putString( new TerminalPosition(0, 0), "Score:");
+        graphics.putString( new TerminalPosition(8, 0), String.valueOf(scoreAdd));
+
 
     }
 
@@ -59,7 +66,7 @@ public class Arena {
     private Boolean canHeroMove(Position position){
 
         if (position.getX() <=0) return false;
-        if (position.getY() <=0) return false;
+        if (position.getY() <=1) return false;
         if (position.getX() >=width-1) return false;
         if (position.getY() >=height-1)return false;
 
@@ -81,20 +88,18 @@ public class Arena {
 
         for (Monster monster : monsters ) {
             int n = rand.nextInt(4);
-            n += 1;
+            //n += 1;
 
-            if (n == 1) {
+            if (n == 0) {
                 moveMonster(monster.moveUp(), monster);
 
-                moveMonster(monster.moveUp(), monster);
-
-            } else if (n == 2) {
+            } else if (n == 1) {
                 moveMonster((monster.moveDown()),monster);
 
-            } else if (n == 3) {
+            } else if (n == 2) {
                 moveMonster((monster.moveLeft()), monster);
 
-            } else if (n == 4) {
+            } else if (n == 3) {
                 moveMonster((monster.moveRight()), monster);
 
             }
@@ -105,12 +110,12 @@ public class Arena {
     private List<Wall> createWalls() {
         List<Wall> walls = new ArrayList<>();
 
-        for (int c = 0; c < width; c++) {
-            walls.add(new Wall(c, 0));
-            walls.add(new Wall(c, height - 1));
+        for (int c = 1; c < width; c++) {
+            walls.add(new Wall(c, 1));
+            walls.add(new Wall(c, height -1));
         }
 
-        for (int r = 1; r < height - 1; r++) {
+        for (int r = 1; r < height ; r++) {
             walls.add(new Wall(0, r));
             walls.add(new Wall(width - 1, r));
         }
@@ -123,7 +128,7 @@ public class Arena {
         ArrayList<Coin> coins = new ArrayList<>();
 
         for (int i = 0; i < 5; i++)
-            coins.add(new Coin(random.nextInt(width - 2) + 1, random.nextInt(height - 2) + 1));
+            coins.add(new Coin(random.nextInt(width - 2) + 1, random.nextInt(height - 3) + 2));
 
         return coins;
     }
@@ -139,6 +144,7 @@ public class Arena {
 
         if (coinsAux !=-1){
             coins.remove(coinsAux);
+            scoreAdd++;
         }
     }
 
@@ -147,7 +153,7 @@ public class Arena {
         ArrayList<Monster> monsters = new ArrayList<>();
 
         for (int i = 0; i < 5; i++)
-            monsters.add(new Monster(random.nextInt(width - 2) + 1, random.nextInt(height - 2) + 1));
+            monsters.add(new Monster(random.nextInt(width - 2) + 1, random.nextInt(height - 3) + 2));
 
         return monsters;
     }
