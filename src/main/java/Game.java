@@ -66,7 +66,7 @@ public class Game {
         if (key.getKeyType() == KeyType.EOF ){
             runVar = false;
         }
-        if (arena.colision() == true){
+        if (arena.checkColisionMonsters() == true){
             runVar = false;
             System.out.println("You lost the Game! ");
        }

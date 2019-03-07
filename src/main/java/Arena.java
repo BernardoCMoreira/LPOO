@@ -12,29 +12,33 @@ public class Arena {
     private int height;
     private int width;
     Hero hero;
-    Monster monsters;
+    //Monster monsters;
+    private List<Monster> monsters;
     private List<Wall> walls;
     private List<Coin> coins;
     Random rand = new Random();
 
     public Arena(int height, int width){
         hero = new Hero( 10, 10);
-        monsters = new Monster ( 50, 10);
+        //monsters = new Monster ( 50, 10);
 
         this.height = height;
         this.width = width;
         this.walls = createWalls();
         this.coins = createCoins();
+        this.monsters = createMonster();
 
     }
 
     public void draw (TextGraphics graphics){
       hero.draw(graphics);
-      monsters.draw(graphics);
+     // monsters.draw(graphics);
         for (Wall wall : walls)
             wall.draw(graphics);
         for (Coin coin : coins)
             coin.draw(graphics);
+        for (Monster monster : monsters )
+            monster.draw(graphics);
 
     }
 
@@ -45,9 +49,9 @@ public class Arena {
 
         }
     }
-    private void moveMonster(Position position){
+    private void moveMonster(Position position, Monster monster){
         if (canHeroMove(position)){
-            monsters.setPosition(position);
+            monster.setPosition(position);
 
         }
     }
@@ -75,24 +79,25 @@ public class Arena {
             moveHero(hero.moveRight());
         }
 
-        int n = rand.nextInt(4);
-        n+=1;
+        for (Monster monster : monsters ) {
+            int n = rand.nextInt(4);
+            n += 1;
 
-        if (n==1){
-            moveMonster(monsters.moveUp());
+            if (n == 1) {
+                moveMonster(monster.moveUp(), monster);
 
-        }
-        else if (n==2){
-            moveMonster((monsters.moveDown()));
+                moveMonster(monster.moveUp(), monster);
 
-        }
-        else if(n==3){
-            moveMonster((monsters.moveLeft()));
+            } else if (n == 2) {
+                moveMonster((monster.moveDown()),monster);
 
-        }
-        else if (n==4){
-            moveMonster((monsters.moveRight()));
+            } else if (n == 3) {
+                moveMonster((monster.moveLeft()), monster);
 
+            } else if (n == 4) {
+                moveMonster((monster.moveRight()), monster);
+
+            }
         }
 
     }
@@ -137,7 +142,7 @@ public class Arena {
         }
     }
 
-   /* private List<Monster> createMonster() {
+    private List<Monster> createMonster() {
         Random random = new Random();
         ArrayList<Monster> monsters = new ArrayList<>();
 
@@ -147,7 +152,7 @@ public class Arena {
         return monsters;
     }
 
-    private void checkColisionMonsters(){
+   public boolean checkColisionMonsters(){
         int monstersAux= -1;
 
         for (int i=0; i<monsters.size(); i++){
@@ -156,14 +161,9 @@ public class Arena {
         }
 
         if (monstersAux !=-1){
-            coins.remove(monstersAux);
+            return true;
         }
-    } */
-       public boolean colision(){
-           if (monsters.getPosition().getX() == hero.getPosition().getX() && monsters.getPosition().getY() == hero.getPosition().getY()) return true;
-
-           return false;
-        }
-
+        return false;
+    }
 
 }
