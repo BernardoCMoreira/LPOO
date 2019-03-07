@@ -1,7 +1,4 @@
-import com.googlecode.lanterna.TerminalPosition;
-import com.googlecode.lanterna.TerminalSize;
-import com.googlecode.lanterna.TextCharacter;
-import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
@@ -10,6 +7,7 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 
 public class Game {
@@ -49,6 +47,16 @@ public class Game {
                     KeyStroke key = screen.readInput();
                     this.processKey(key);
                 }
+                this.draw();
+                try
+                {
+                    Thread.sleep(2000);
+
+                }
+                catch(InterruptedException ex)
+                {
+                    Thread.currentThread().interrupt();
+                }
                 screen.close();
 
             } catch (IOException e) {
@@ -66,9 +74,11 @@ public class Game {
         if (key.getKeyType() == KeyType.EOF ){
             runVar = false;
         }
-        if (arena.checkColisionMonsters() == true){
-            runVar = false;
+       if (arena.checkColisionMonsters() == true){
             System.out.println("You lost the Game! ");
+            runVar = false;
+
+
        }
     }
 

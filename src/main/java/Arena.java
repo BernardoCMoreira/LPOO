@@ -1,11 +1,10 @@
 import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalPosition;
+import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,19 +32,28 @@ public class Arena {
     }
 
     public void draw (TextGraphics graphics){
-      hero.draw(graphics);
-        for (Wall wall : walls)
-            wall.draw(graphics);
-        for (Coin coin : coins)
-            coin.draw(graphics);
-        for (Monster monster : monsters )
-            monster.draw(graphics);
 
-        graphics.setForegroundColor(TextColor.Factory.fromString("#FF0000"));
-        graphics.enableModifiers(SGR.BOLD);
-        graphics.putString( new TerminalPosition(0, 0), "Score:");
-        graphics.putString( new TerminalPosition(8, 0), String.valueOf(scoreAdd));
+        if(checkColisionMonsters() == false) {
+            hero.draw(graphics);
+            for (Wall wall : walls)
+                wall.draw(graphics);
+            for (Coin coin : coins)
+                coin.draw(graphics);
+            for (Monster monster : monsters)
+                monster.draw(graphics);
 
+          //Draw de score
+          graphics.setForegroundColor(TextColor.Factory.fromString("#FF0000"));
+          graphics.enableModifiers(SGR.BOLD);
+          graphics.putString(new TerminalPosition(0, 0), "Score:");
+          graphics.putString(new TerminalPosition(8, 0), String.valueOf(scoreAdd));
+      }
+    else {
+          graphics.setForegroundColor(TextColor.Factory.fromString("#FF0000"));
+          graphics.enableModifiers(SGR.BOLD);
+          graphics.putString(new TerminalPosition(graphics.getSize().getColumns()/2-4, graphics.getSize().getRows()/2), "YOU DIED");
+
+      }
 
     }
 
@@ -171,5 +179,6 @@ public class Arena {
         }
         return false;
     }
+
 
 }
